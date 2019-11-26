@@ -1,7 +1,10 @@
+
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from common.common import BasePages
 
 class FundCalPage(BasePages):
+    # driver = webdriver.Chrome()
     salary_loc = (By.ID,'salary')
     fund_percent_loc = (By.ID,'fund_percent')
     fund_company_loc = (By.ID,'fund_company')
@@ -10,23 +13,17 @@ class FundCalPage(BasePages):
     per_fund_loc = (By.XPATH,"//*[@id='payment']/div[1]/div[4]/div/div[1]/div/input")
     per_supfund_loc = (By.XPATH,"//*[@id='payment']/div[1]/div[4]/div/div[2]/div/input")
     # 有补充公积金
-    total_loc1 = (By.XPATH,"//*[@id='payment']/div[1]/div[4]/div/div[3]/div/input")
-    # 无补充公积金
-    total_loc2 = (By.XPATH,"//*[@id='payment']/div[1]/div[4]/div/div[1]/div/input")
+    total_loc1 = "//*[@id='payment']/div[1]/div[4]/div/div[3]/div/input"
+    # total_loc1 = (By.XPATH,"//*[@id='payment']/div[1]/div[4]/div/div[3]/div/input")
+    # 无补充公积金//*[@id="payment"]/div[1]/div[4]/div/div[1]/div/input
+    # total_loc2 = (By.XPATH,"//*[@id='payment']/div[1]/div[4]/div/div[1]/div/input")
+    # total_loc2 = "//*[@id='payment']/div[1]/div[4]/div/div[3]/div/input"
+    total_loc2 = "//*[@id='payment']/div[1]/div[4]/div/div[1]/div/input"
+    text_xpath = "//*[@id='payment']/div[1]/div[3]/p"
+
 
     def open(self):
         self._open(self.base_url,self.pagetitle)
-
-    # 判断补充公积金是否存在
-    def is_supfund_exists(self):
-        flag = True
-        try:
-            if len(self.supplement_percent_loc) == 0:
-                return flag
-        except:
-            flag = False
-            return flag
-            # print("该城市不存在补充公积金")
 
     # 输入工资
     def input_salary(self,salary):
@@ -48,10 +45,22 @@ class FundCalPage(BasePages):
     def click_count(self):
         self.find_element(*self.count_loc).click()
 
+    # 获取缴存基数上限
+    def get_max_salary(self):
+        max = self.get_basecount_salary(self.driver,self.text_xpath)
+        return float(max[2])
+
+        # 获取缴存基数下限
+    def get_min_salary(self):
+        min = self.get_basecount_salary(self.driver, self.text_xpath)
+        return float(min[3])
+
     # 自定义计算-公积金
     def count(self,salary,fund_percent,fund_company,sup_percent):
         if self.is_supfund_exists():
-            count_total = salary*(fund_percent,fund_company,sup_percent)/100
+            total = (fund_percent + fund_company + sup_percent)/100
+            count_total = round(salary*total, 2)
         else:
-            count_total = salary*(fund_percent,fund_company)/100
+            total = (fund_percent + fund_company + 0) / 100
+            count_total = round(salary*total, 2)
         return count_total

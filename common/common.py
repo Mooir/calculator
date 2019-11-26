@@ -1,4 +1,4 @@
-from selenium import webdriver
+import re
 from selenium.webdriver.support.wait import WebDriverWait
 from  selenium.webdriver.support import expected_conditions as EC
 from time import sleep
@@ -49,6 +49,29 @@ class BasePages(object):
         except:
             print("%s页面 中未能找到%s元素"%(self,loc))
 
+    def get_ele(self, type, value):
+        if type == 'id':
+            el = self.driver.find_element_by_id(value)
+        elif type == "name":
+            el = self.driver.find_element_by_name(value)
+        elif type == "class_name":
+            el = self.driver.find_element_by_class_name(value)
+        elif type == "tag_name":
+            el = self.driver.find_element_by_tag_name(value)
+        elif type == "link_text":
+            el = self.driver.find_element_by_link_text(value)
+        elif type == "partial_link_text":
+            el = self.driver.find_element_by_partial_link_text(value)
+        elif type == "xpath":
+            el = self.driver.find_element_by_xpath(value)
+        elif type == "css_selector":
+            el = self.driver.find_element_by_css_selector(value)
+        elif type == "class_names":
+            el = self.driver.find_elements_by_class_name(value)
+        elif type == "xpaths":
+            el = self.driver.find_elements_by_xpath(value)
+        return el
+
     def switch_frame(self,loc):
         return self.driver.switch_to_frame(loc)
     
@@ -65,3 +88,12 @@ class BasePages(object):
                 self.find_element(*loc).send_keys(vaule)
         except AttributeError:
             print ("%s 页面中未能找到 %s 元素"%(self, loc))
+
+    def get_basecount_salary(self,driver,xpath):
+        value = driver.find_element_by_xpath(xpath).get_attribute('textContent')
+        p = re.compile(r'[1-9]+\.?[0-9]*')
+        list1 = p.findall(value)
+        return list1
+
+
+
