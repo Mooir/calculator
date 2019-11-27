@@ -17,10 +17,10 @@ class FunCalCount(unittest.TestCase):
         self.driver = webdriver.Chrome(options=options)
         self.driver.implicitly_wait(30)
         self.url = "https://apps.eshiyun.info/tools/gjjPayment?geoCode=SHS"
-        self.salary = 10043
-        self.fund_percent = 7
-        self.fund_company = 7
-        self.supplement_percent = 1
+        self.salary = 2419
+        self.fund_percent = 5
+        self.fund_company = 5
+        self.supplement_percent = 5
 
     def test_1(self):
         '''
@@ -39,7 +39,7 @@ class FunCalCount(unittest.TestCase):
         fundcount_page.click_count()
 
         count1 = fundcount_page.count(self.salary, self.fund_percent, self.fund_company, self.supplement_percent)
-        count2 = self.driver.find_element_by_xpath(fundcount_page.total_loc2).get_attribute('value')
+        count2 = self.driver.find_element_by_xpath(fundcount_page.total_loc1).get_attribute('value')
         try:
             self.assertEqual(float(count2), float(count1), msg="计算结果错误")
         except Exception as e:

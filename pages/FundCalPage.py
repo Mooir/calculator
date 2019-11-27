@@ -15,9 +15,8 @@ class FundCalPage(BasePages):
     # 有补充公积金
     total_loc1 = "//*[@id='payment']/div[1]/div[4]/div/div[3]/div/input"
     # total_loc1 = (By.XPATH,"//*[@id='payment']/div[1]/div[4]/div/div[3]/div/input")
-    # 无补充公积金//*[@id="payment"]/div[1]/div[4]/div/div[1]/div/input
+    # 无补充公积金
     # total_loc2 = (By.XPATH,"//*[@id='payment']/div[1]/div[4]/div/div[1]/div/input")
-    # total_loc2 = "//*[@id='payment']/div[1]/div[4]/div/div[3]/div/input"
     total_loc2 = "//*[@id='payment']/div[1]/div[4]/div/div[1]/div/input"
     text_xpath = "//*[@id='payment']/div[1]/div[3]/p"
 
@@ -50,17 +49,20 @@ class FundCalPage(BasePages):
         max = self.get_basecount_salary(self.driver,self.text_xpath)
         return float(max[2])
 
-        # 获取缴存基数下限
+    # 获取缴存基数下限
     def get_min_salary(self):
         min = self.get_basecount_salary(self.driver, self.text_xpath)
         return float(min[3])
 
     # 自定义计算-公积金
     def count(self,salary,fund_percent,fund_company,sup_percent):
-        if self.is_supfund_exists():
-            total = (fund_percent + fund_company + sup_percent)/100
-            count_total = round(salary*total, 2)
-        else:
-            total = (fund_percent + fund_company + 0) / 100
-            count_total = round(salary*total, 2)
+        if self.get_min_salary() <= salary <= self.get_max_salary():
+            total = salary*(fund_company + fund_percent + sup_percent)
+            count_total = total/100
+        elif salary < self.get_min_salary():
+            total = self.get_min_salary() * (fund_company + fund_percent + sup_percent)
+            count_total = total / 100
+        elif salary > self.get_max_salary():
+            total = self.get_max_salary() * (fund_company + fund_percent + sup_percent)
+            count_total = total / 100
         return count_total
