@@ -17,17 +17,30 @@ class FunCalCount(unittest.TestCase):
         self.driver = webdriver.Chrome(options=options)
         self.driver.implicitly_wait(30)
         self.url = "https://apps.eshiyun.info/tools/gjjPayment?geoCode=SHS"
-        self.salary = 2419
-        self.fund_percent = 5
-        self.fund_company = 5
-        self.supplement_percent = 5
+        self.salary = 10000
+        self.fund_percent = 9
+        self.fund_company = 9
+        self.supplement_percent = 8
 
     def test_1(self):
         '''
         有补充公积金
         :return:
         '''
+        filename = u"C:/code/calculator/cases/testcase.xlsx"
+        sheetname = u'Sheet1'
+
+        # filename = u"C:/code/calculator/cases/testcase.xlsx"
+        # work = xlrd.open_workbook(filename)
+        # sheet = work.sheet_by_name("Sheet1")
+        # print("总共有{lines}".format(lines = sheet.nrows))
+        # print("总共有{cols}".format(cols=sheet.ncols))
+        # for line  in range(0,sheet.nrows):
+        #     salary, fund_persent, fund_company,sup_fun = sheet.row_values(line)
+        #     print(salary, fund_persent, fund_company,sup_fun)
         fundcount_page = FundCalPage(self.driver,self.url, '公积金计算器')
+        list = fundcount_page.get_testdata()
+        print(list)
         fundcount_page.open()
         fundcount_page.input_salary(self.salary)
         fundcount_page.input_fund_percent(self.fund_percent)

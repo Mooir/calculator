@@ -1,4 +1,5 @@
 import re
+import xlrd
 from selenium.webdriver.support.wait import WebDriverWait
 from  selenium.webdriver.support import expected_conditions as EC
 from time import sleep
@@ -94,6 +95,27 @@ class BasePages(object):
         p = re.compile(r'[1-9]+\.?[0-9]*')
         list1 = p.findall(value)
         return list1
+
+    def get_data(self,filepath,sheetname):
+        list = []
+        workbook = xlrd.open_workbook(filepath)
+        # workbook = xlrd.open_workbook(u"C:/code/calculator/cases/testcase.xlsx")
+        sheet = workbook.sheet_by_name(sheetname)
+        lines = sheet.nrows
+        clos = sheet.ncols
+        for line in range(1,lines):
+            for clo in range(0,clos):
+                msg = {}
+                msg['salary'] = int(sheet.cell_value(line,clo))
+                msg['fund_percent'] = int(sheet.cell_value(line, clo))
+                msg['fund_company'] = int(sheet.cell_value(line, clo))
+                msg['sup_fund'] = int(sheet.cell_value(line, clo))
+                return msg
+            list.append(self.msg)
+        return  list
+
+
+
 
 
 
