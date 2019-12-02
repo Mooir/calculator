@@ -2,7 +2,7 @@ import unittest
 from time import sleep
 from pages.FundCalPage import *
 
-
+# 上海：公积金计算器
 class FunCalCount(unittest.TestCase):
 
     def setUp(self):
@@ -12,7 +12,7 @@ class FunCalCount(unittest.TestCase):
         self.driver = webdriver.Chrome(options=options)
         self.driver.implicitly_wait(30)
         self.url = "https://apps.eshiyun.info/tools/gjjPayment?geoCode=SHS"
-        self.fundcount_page = FundCalPage(self.driver, self.url, '公积金计算器')
+        self.fundcount_page = FundCalPage(self.driver,self.url)
 
     def test_1(self):
         '''
@@ -21,7 +21,7 @@ class FunCalCount(unittest.TestCase):
         '''
 
         self.fundcount_page.open()
-        list = self.fundcount_page.get_testdata()
+        list = self.fundcount_page.get_SH_testdata()
         sleep(5)
         for item in list:
             self.salary = str(item['salary'])

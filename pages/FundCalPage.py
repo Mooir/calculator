@@ -16,12 +16,13 @@ class FundCalPage(BasePages):
     total_loc2 = "//*[@id='payment']/div[1]/div[4]/div/div[1]/div/input"
     text_xpath = "//*[@id='payment']/div[1]/div[3]/p"
     # 测试用例表格
-    filepath = "C:/code/calculator/cases/testcase.xlsx"
-    sheetname = "Sheet1"
+    filepath = "C:/code/calculator/cases/FundCalculator/testcase.xlsx"
+    sheetname_SH = "Sheet1"
+    sheetname_other = "Sheet2"
     base_url = "https://apps.eshiyun.info/tools/gjjPayment?geoCode=SHS"
 
     def open(self):
-        self._open(self.base_url,self.pagetitle)
+        self._open(self.base_url)
 
     # 输入工资
     def input_salary(self,salary):
@@ -49,15 +50,15 @@ class FundCalPage(BasePages):
 
     # 获取缴存基数上限
     def get_max_salary(self):
-        max = self.get_basecount_salary(self.driver,self.text_xpath)
+        max = self.get_basecount_salary(self.driver,self.text_xpath, 'textContent')
         return float(max[2])
 
     # 获取缴存基数下限
     def get_min_salary(self):
-        min = self.get_basecount_salary(self.driver, self.text_xpath)
+        min = self.get_basecount_salary(self.driver, self.text_xpath, 'textContent')
         return float(min[3])
 
-    # 自定义计算-公积金
+    # 上海： 自定义计算-公积金
     def count(self, salary, fund_percent, fund_company, sup_percent):
         if float(fund_percent) < 5:
             fund_percent = 5
@@ -80,7 +81,31 @@ class FundCalPage(BasePages):
             count_total = self.get_max_salary()*total
         return round(count_total,2)
 
-    # 获取测试用例数据
-    def get_testdata(self):
-        list = self.get_data(self.filepath, self.sheetname)
+    # 其他城市：自定义计算-公积金
+    def count_other(self, salary, fund_percent, fund_company):
+        if float(fund_percent) < 5:
+            fund_percent = 5
+        if float(fund_percent) > 12:
+            fund_percent = 12
+        if float(fund_company) < 5:
+            fund_company = 5
+        if float(fund_company) > 12:
+            fund_company = 12
+        total = (float(fund_company) + float(fund_percent))/100
+        if self.get_min_salary() <= float(salary) <= self.get_max_salary():
+            count_total = float(salary)*total
+        elif float(salary) < self.get_min_salary():
+            count_total = self.get_min_salary()*total
+        elif float(salary) > self.get_max_salary():
+            count_total = self.get_max_salary()*total
+        return round(count_total,2)
+
+    # 获取测试用例数据--上海
+    def get_SH_testdata(self):
+        list = self.get_data(self.filepath, self.sheetname_SH)
+        return list
+
+    # 获取测试用例--其他城市
+    def get_other_testdata(self):
+        list = self.get_data(self.filepath, self.sheetname_other)
         return list

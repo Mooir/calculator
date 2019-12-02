@@ -23,25 +23,26 @@ from  selenium.webdriver.support import expected_conditions as EC
 海口：HNHK
 柳州：GXLZ
 驻马店：HNZMD
-扬州：JSYZ
+扬州：JSYZ-
 '''
 class BasePages(object):
-    def __init__(self,selenium_driver,base_url,pagetitle):
+    def __init__(self,selenium_driver,base_url):
         self.driver = selenium_driver
         self.base_url = base_url
-        self.pagetitle = pagetitle
+        # self.pagetitle = pagetitle
 
-    def on_page(self,pagetitle):
+    def on_page(self,pagetitle=None):
         return pagetitle in self.driver.title
 
-    def _open(self,url,pagetitle):
+    def _open(self,url,pagetitle=None):
         self.driver.get(url)
         self.driver.maximize_window()
-        assert self.on_page(pagetitle),u"打开开页面失败 %s"%url
+        if pagetitle is not None:
+            assert self.on_page(pagetitle),u"打开开页面失败 %s"%url
 
-    def open(self):
-        self._open(self.base_url,self.pagetitle)
-
+    # def open(self):
+    #     # self._open(self.base_url,self.pagetitle)
+    #     self._open(self.base_url)
     def find_element(self,*loc):
         try:
             WebDriverWait(self.driver,10).until(EC.visibility_of_element_located(loc))
@@ -65,12 +66,17 @@ class BasePages(object):
         #         self.find_element(*loc).send_keys(vaule)
         # except AttributeError:
         #     print ("%s 页面中未能找到 %s 元素"%(self, loc))
-
-    def get_basecount_salary(self,driver,xpath):
-        value = driver.find_element_by_xpath(xpath).get_attribute('textContent')
-        p = re.compile(r'[1-9]+\.?[0-9]*')
+    # 获取上下限
+    def get_basecount_salary(self,driver,xpath,key):
+        value = driver.find_element_by_xpath(xpath).get_attribute(key)
+        # p = re.compile(r'[1-9]+\.?[0-9]*')
+        # value = driver.find_element_by_xpath(xpath).get_attribute('placeholder')
+        # value = driver.find_elements_by_xpath(xpath).get_attribute(key)
+        p = p = re.compile(r'[1-9]+\.?[0-9]*')
         list1 = p.findall(value)
         return list1
+
+
 
     def get_data(self,filepath,sheetname):
         list = []
