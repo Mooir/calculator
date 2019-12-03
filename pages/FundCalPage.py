@@ -50,12 +50,12 @@ class FundCalPage(BasePages):
 
     # 获取缴存基数上限
     def get_max_salary(self):
-        max = self.get_basecount_salary(self.driver,self.text_xpath, 'textContent')
+        max = self.get_ele_value(self.driver,self.text_xpath, 'textContent')
         return float(max[2])
 
     # 获取缴存基数下限
     def get_min_salary(self):
-        min = self.get_basecount_salary(self.driver, self.text_xpath, 'textContent')
+        min = self.get_ele_value(self.driver, self.text_xpath, 'textContent')
         return float(min[3])
 
     # 上海： 自定义计算-公积金

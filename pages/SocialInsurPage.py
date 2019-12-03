@@ -7,6 +7,9 @@ class SocialPage(BasePages):
     base_url = "https://apps.eshiyun.info/tools/social?geoCode=SHS"
     # 税前收入输入框
     salary_input_loc = (By.XPATH,"//*[@id='social']/div[1]/div[2]/div[2]/div[2]/input")
+    # 自定义社保基数输入框
+    cardinal_loc1 = (By.XPATH, "//*[@id='social']/div[1]/div[2]/div[3]/div[2]/input")
+    cardinal_loc = "//*[@id='social']/div[1]/div[2]/div[3]/div[2]/input"
     # 计算按钮
     count_loc = (By.CLASS_NAME,"social_btn")
     # 缴纳规则选择
@@ -17,9 +20,7 @@ class SocialPage(BasePages):
     customize_loc = (By.XPATH,"//*[@id='social']/div[1]/div[4]/div/div[2]/p[3]")
     # 缴纳规则选择-确定按钮
     confer_loc = (By.XPATH,"//*[@id='social']/div[1]/div[4]/div/div[1]/div[1]")
-    # 社保基数输入框
-    # cardinal_loc = (By.XPATH, "//*[@id='social']/div[1]/div[2]/div[3]/div[2]/input")
-    cardinal_loc = "//*[@id='social']/div[1]/div[2]/div[3]/div[2]/input"
+
 
 
     def open(self):
@@ -34,14 +35,19 @@ class SocialPage(BasePages):
         self.find_element(*self.salary_input_loc).clear()
         self.find_element(*self.salary_input_loc).send_keys(salary)
 
+    # 输入自定义社保基数
+    def input_soc_fund(self, soc_fund):
+        self.find_element(*self.cardinal_loc1).clear()
+        self.find_element(*self.cardinal_loc1).send_keys(soc_fund)
+
     # 获取缴存基数下限
     def get_num_min(self):
-        num = self.get_basecount_salary(self.driver, self.cardinal_loc, 'placeholder')
+        num = self.get_ele_value(self.driver, self.cardinal_loc, 'placeholder')
         return float(num[0])
 
     # 获取缴存基数上限
     def get_num_max(self):
-        num = self.get_basecount_salary(self.driver, self.cardinal_loc, 'placeholder')
+        num = self.get_ele_value(self.driver, self.cardinal_loc, 'placeholder')
         return float(num[1])
 
     # 计算

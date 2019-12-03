@@ -48,10 +48,10 @@ class BasePages(object):
             WebDriverWait(self.driver,10).until(EC.visibility_of_element_located(loc))
             return self.driver.find_element(*loc)
         except:
-            print("%s页面 中未能找到%s元素"%(self , loc))
+            print("%s页面 中未能找到%s元素"%(self, *loc))
 
-    def switch_frame(self,loc):
-        return self.driver.switch_to_frame(loc)
+    def switch_frame(self, *loc):
+        return self.driver.switch_to_frame(*loc)
     
     def script(self,src):
         self.driver.execute_script(src)
@@ -66,26 +66,33 @@ class BasePages(object):
         #         self.find_element(*loc).send_keys(vaule)
         # except AttributeError:
         #     print ("%s 页面中未能找到 %s 元素"%(self, loc))
-    # 获取上下限
-    def get_basecount_salary(self,driver,xpath,key):
+    # 获取元素的内容
+    def get_ele_value(self, driver, xpath, key):
         value = driver.find_element_by_xpath(xpath).get_attribute(key)
         # p = re.compile(r'[1-9]+\.?[0-9]*')
         # value = driver.find_element_by_xpath(xpath).get_attribute('placeholder')
         # value = driver.find_elements_by_xpath(xpath).get_attribute(key)
-        p = p = re.compile(r'[1-9]+\.?[0-9]*')
-        list1 = p.findall(value)
-        return list1
+        # p = re.compile(r'[1-9]+\.?[0-9]*')
+        # list1 = p.findall(value)
 
+        list_limits = self.get_num(value)
+        return list_limits
 
+    # 提取文本中的数字
+    def get_num(self, str):
+        p = re.compile(r'[0-9]+\.?[0-9]*')
+        # p = re.compile(r'\d +.?\d *')
+        list_num = p.findall(str)
+        return list_num
 
-    def get_data(self,filepath,sheetname):
+    def get_data(self, filepath, sheetname):
         list = []
         workbook = xlrd.open_workbook(filepath)
         sheet = workbook.sheet_by_name(sheetname)
         lines = sheet.nrows
         clos = sheet.ncols
-        for line in range(1,lines):
-            for clo in range(0,clos):
+        for line in range(1, lines):
+            for clo in range(0, clos):
                 msg = {}
                 msg['salary'] = sheet.cell_value(line, 0)
                 msg['fund_percent'] = sheet.cell_value(line, 1)
