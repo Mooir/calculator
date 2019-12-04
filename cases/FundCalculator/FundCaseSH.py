@@ -22,6 +22,7 @@ class FunCalCount(unittest.TestCase):
 
         self.fundcount_page.open()
         list = self.fundcount_page.get_SH_testdata()
+        print(list)
         sleep(5)
         for item in list:
             self.salary = str(item['salary'])

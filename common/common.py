@@ -101,6 +101,22 @@ class BasePages(object):
             list.append(msg)
         return  list
 
+    def read_excel(self, filepath, sheetname):
+        data = xlrd.open_workbook(filepath)
+        table = data.sheet_by_name(sheetname)
+        keys = table.row_values(0)
+        rowNum = table.nrows
+        colNum = table.ncols
+        if rowNum < 2:
+            print("表格内数据行数小于2行")
+        else:
+            L = []
+            for i in range(1, rowNum):
+                sheet_data = {}
+                for j in range(colNum):
+                    sheet_data[keys[j]] = table.row_values(i)[j]
+                L.append(sheet_data)
+            return L
 
 
 

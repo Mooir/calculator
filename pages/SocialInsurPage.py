@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from common.common import BasePages
+from common.common import *
+from time import sleep
 
 class SocialPage(BasePages):
     # URL
@@ -20,6 +21,13 @@ class SocialPage(BasePages):
     customize_loc = (By.XPATH,"//*[@id='social']/div[1]/div[4]/div/div[2]/p[3]")
     # 缴纳规则选择-确定按钮
     confer_loc = (By.XPATH,"//*[@id='social']/div[1]/div[4]/div/div[1]/div[1]")
+    # toast提示
+    toast_info_loc = (By.CLASS_NAME, "lx-toast lx-toast-center")
+    # 测试用例数据：
+    filepath = "C:/code/calculator/cases/SocialInsurance/TestData.xlsx"
+    # 表名--自定义社保基数
+    sheetname_cardinal_Y = "Sheet1"
+    sheetname_cardinal_N = "Sheet2"
 
 
 
@@ -40,6 +48,14 @@ class SocialPage(BasePages):
         self.find_element(*self.cardinal_loc1).clear()
         self.find_element(*self.cardinal_loc1).send_keys(soc_fund)
 
+    # 选择社保缴纳规则-自定义基数缴纳
+    def rule_cardinal(self):
+        self.click(self.change_rule_loc)
+        sleep(0.5)
+        self.click(self.customize_loc)
+        self.click(self.confer_loc)
+
+
     # 获取缴存基数下限
     def get_num_min(self):
         num = self.get_ele_value(self.driver, self.cardinal_loc, 'placeholder')
@@ -50,4 +66,16 @@ class SocialPage(BasePages):
         num = self.get_ele_value(self.driver, self.cardinal_loc, 'placeholder')
         return float(num[1])
 
-    # 计算
+    # 获取自定义社保基数测试数据-正常情况
+    def get_cardinal_dataY(self):
+        list = self.read_excel(self.filepath, self.sheetname_cardinal_Y)
+        return list
+
+    # 获取自定义社保基数测试数据-非正常情况（有toast提示）
+    def get_cardinal_dataN(self):
+        list = self.read_excel(self.filepath, self.sheetname_cardinal_N)
+        return list
+
+    def find_toast(self):
+        text = self.get_ele_value(self.driver,self.toast_info_loc,'contentText')
+        return text

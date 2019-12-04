@@ -61,12 +61,12 @@ class SocialResult(BasePages):
 
     # 自定义计算结果
     def get_result(self, base_soc_fund, min, max):
-        if base_soc_fund < min:
+        if float(base_soc_fund) < min:
             base_soc_fund = min
-        elif base_soc_fund > max:
+        elif float(base_soc_fund) > max:
             base_soc_fund = max
-        elif min <= base_soc_fund <= max:
-            base_soc_fund = base_soc_fund
+        elif min <= float(base_soc_fund) <= max:
+            base_soc_fund = float(base_soc_fund)
         count_comp = base_soc_fund*self._get_total_company()
         count_pers = base_soc_fund*self._get_total_personal()
         count = round(count_comp,2) + round(count_pers,2)
@@ -76,3 +76,4 @@ class SocialResult(BasePages):
     def get_pageResult(self):
         text = self.get_ele_value(self.driver, self.total_count_loc, 'textContent')
         return math.floor(float(text[0])*10**1)/(10**1)
+
