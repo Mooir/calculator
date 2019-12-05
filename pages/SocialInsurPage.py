@@ -15,6 +15,8 @@ class SocialPage(BasePages):
     count_loc = (By.CLASS_NAME,"social_btn")
     # 缴纳规则选择
     change_rule_loc = (By.XPATH, "//*[@id='social']/div[1]/div[2]/div[3]/div[1]/span[2]")
+    # 缴纳规则-税前工资
+    default_loc = (By.XPATH, "//*[@id='social']/div[1]/div[4]/div/div[2]/p[1]")
     # 缴纳规则-最低基数
     low_loc = (By.XPATH,"//*[@id='social']/div[1]/div[4]/div/div[2]/p[2]")
     # 缴纳规则-自定义基数
@@ -22,14 +24,14 @@ class SocialPage(BasePages):
     # 缴纳规则选择-确定按钮
     confer_loc = (By.XPATH,"//*[@id='social']/div[1]/div[4]/div/div[1]/div[1]")
     # toast提示
-    toast_info_loc = (By.CLASS_NAME, "lx-toast lx-toast-center")
+    toast_info_loc = "/html/body/div[3]"
     # 测试用例数据：
     filepath = "C:/code/calculator/cases/SocialInsurance/TestData.xlsx"
     # 表名--自定义社保基数
     sheetname_cardinal_Y = "Sheet1"
     sheetname_cardinal_N = "Sheet2"
-
-
+    sheetname_default = "Sheet3"
+    sheetname_lowest = "Sheet4"
 
     def open(self):
         self._open(self.base_url)
@@ -54,6 +56,20 @@ class SocialPage(BasePages):
         sleep(0.5)
         self.click(self.customize_loc)
         self.click(self.confer_loc)
+    
+    # 选择社保缴纳规则-按税前工资缴纳
+    def rule_default(self):
+        self.click(self.change_rule_loc)
+        sleep(0.5)
+        self.click(self.default_loc)
+        self.click(self.confer_loc)
+
+    # 选择社保缴纳规则-按最低基数缴纳
+    def rule_lowest(self):
+        self.click(self.change_rule_loc)
+        sleep(0.5)
+        self.click(self.low_loc)
+        self.click(self.confer_loc)
 
 
     # 获取缴存基数下限
@@ -76,6 +92,23 @@ class SocialPage(BasePages):
         list = self.read_excel(self.filepath, self.sheetname_cardinal_N)
         return list
 
-    def find_toast(self):
-        text = self.get_ele_value(self.driver,self.toast_info_loc,'contentText')
-        return text
+    # 获取按税前工资缴纳测试数据
+    def get_default_data(self):
+        list = self.read_excel(self.filepath, self.sheetname_default)
+        return list
+    
+    # 获取按最低基数缴纳测试数据
+    def get_lowest_data(self):
+        list = self.read_excel(self.filepath, self.sheetname_lowest)
+        return list
+        
+    # toast提示是否存在
+    def isElementPresent(self):
+        from selenium.common.exceptions import NoSuchElementException
+        try:
+            self.driver.find_element_by_xpath(self.toast_info_loc)
+        except NoSuchElementException as e:
+            print(e)
+            return False
+        else:
+            return True

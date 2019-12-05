@@ -59,7 +59,7 @@ class SocialResult(BasePages):
         total_percent_personal = self._get_total_percent(self.percent_personal_locs)
         return total_percent_personal
 
-    # 自定义计算结果
+    # 自定义计算结果-自定义基数/税前工资
     def get_result(self, base_soc_fund, min, max):
         if float(base_soc_fund) < min:
             base_soc_fund = min
@@ -70,10 +70,19 @@ class SocialResult(BasePages):
         count_comp = base_soc_fund*self._get_total_company()
         count_pers = base_soc_fund*self._get_total_personal()
         count = round(count_comp,2) + round(count_pers,2)
-        return math.floor(count*10**1)/(10**1)
+        # return math.floor(count*10**1)/(10**1)
+        return math.floor(count)
 
+    # 自定义计算结果-按最低基数缴纳
+    def get_result_lowest(self, min):
+        count_comp = min*self._get_total_company()
+        count_pers = min*self._get_total_personal()
+        count = round(count_comp,2) + round(count_pers,2)
+        # return math.floor(count*10**1)/(10**1)
+        return math.floor(count)
+        
     # 获取页面上计算结果
     def get_pageResult(self):
         text = self.get_ele_value(self.driver, self.total_count_loc, 'textContent')
-        return math.floor(float(text[0])*10**1)/(10**1)
-
+        # return math.floor(float(text[0])*10**1)/(10**1)
+        return math.floor(float(text[0]))
