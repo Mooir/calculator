@@ -9,10 +9,10 @@ from  selenium.webdriver.support import expected_conditions as EC
 # # 个税：
 # https://apps.eshiyun.info/tools/tax2?geoCode=HNZMD 
 #
-# # 公积金：
+# # 公积金-完成：
 # https://apps.eshiyun.info/tools/gjjPayment?geoCode=HNZMD
 #
-# # 社保：
+# # 社保-完成：
 # https://apps.eshiyun.info/tools/social?geoCode=HNZMD
 
 # 城市代码
