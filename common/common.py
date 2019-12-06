@@ -69,12 +69,6 @@ class BasePages(object):
     # 获取元素的内容
     def get_ele_value(self, driver, xpath, key):
         value = driver.find_element_by_xpath(xpath).get_attribute(key)
-        # p = re.compile(r'[1-9]+\.?[0-9]*')
-        # value = driver.find_element_by_xpath(xpath).get_attribute('placeholder')
-        # value = driver.find_elements_by_xpath(xpath).get_attribute(key)
-        # p = re.compile(r'[1-9]+\.?[0-9]*')
-        # list1 = p.findall(value)
-
         list_limits = self.get_num(value)
         return list_limits
 
