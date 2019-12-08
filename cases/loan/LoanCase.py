@@ -25,10 +25,12 @@ class LoanCount(unittest.TestCase):
         self.loan_page.open()
         val = self.loan_page.get_value_year()
         acc_rate = self.loan_page.get_acc_rate()
-        print(acc_rate,type(acc_rate))
+        print(acc_rate, type(acc_rate))
         # self.driver.find_elements_by_class_name()
-        self.loan_page.select_year(29)
+        self.loan_page.select_year(25)
+        print(self.loan_page.get_value_year())
         sleep(5)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -67,3 +67,15 @@ class LoanPage(BasePages):
             sleep(0.5)
         sleep(0.5)
         self.driver.find_elements_by_xpath(self.loc_confer)[0].click()
+
+    # 选择公积金贷款利率[30-31]
+    def select_acc_rate(self, num):
+        self.driver.find_element_by_xpath(self.loc_acc_rate).click()
+        sleep(0.5)
+        list = self.driver.find_elements_by_xpath(self.loc_select)
+
+
+    # 选择商业贷款利率[32-47]
+    def select_buss_rate(self, num):
+
+        self.driver.find_elements_by_xpath(self.loc_confer)[0].click()
