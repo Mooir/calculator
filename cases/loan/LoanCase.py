@@ -1,10 +1,13 @@
 import re
+import sys
 import time
 import unittest
 from selenium import webdriver
 from time import sleep
+sys.path.append('C:\\code\\calculator')
 from pages.LoanPage import *
 from pages.LoanResultPage import *
+
 
 class LoanCount(unittest.TestCase):
     """贷款计算器"""

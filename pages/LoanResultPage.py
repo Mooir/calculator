@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import sys
+sys.path.append('C:\\code\\calculator\\common')
 from common.common import *
 from time import sleep
 

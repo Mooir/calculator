@@ -1,6 +1,8 @@
 import random
+import sys
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+sys.path.append('C:\\code\\calculator\\common')
 from common.common import *
 from time import sleep
 
@@ -56,7 +58,7 @@ class LoanPage(BasePages):
         list = self.get_ele_value(self.driver, self.loc_buss_rate, 'value')
         return float(list[0])
 
-    # 选择贷款年限
+    # 选择贷款年限[0-29]
     def select_year(self, year_num):
         # self.find_element(*self.loc_year).click()
         self.driver.find_element_by_xpath(self.loc_year).click()
@@ -69,13 +71,30 @@ class LoanPage(BasePages):
         self.driver.find_elements_by_xpath(self.loc_confer)[0].click()
 
     # 选择公积金贷款利率[30-31]
-    def select_acc_rate(self, num):
+    def select_acc_rate(self, acc_rate):
         self.driver.find_element_by_xpath(self.loc_acc_rate).click()
         sleep(0.5)
         list = self.driver.find_elements_by_xpath(self.loc_select)
-
+        if acc_rate == '公积金基准利率':
+            list[30].click()
+        elif acc_rate =='二套房固定利率':
+            list[31].click()
+        self.driver.find_elements_by_xpath(self.loc_confer)[1].click()
 
     # 选择商业贷款利率[32-47]
-    def select_buss_rate(self, num):
+    def select_buss_rate(self, buss_rate):
+        self.driver.find_element_by_xpath(self.loc_buss_rate).click()
+        sleep(0.5)
+        list = self.driver.find_elements_by_xpath(self.loc_select)
+        if buss_rate == '商业贷基准利率':
+            i = 32
+        elif buss_rate == '7折利率':
+            i = 33
+        elif buss_rate == '8折利率':
+            i = 34
+        elif buss_rate == '':
+            i = 35
 
-        self.driver.find_elements_by_xpath(self.loc_confer)[0].click()
+        # for val in range(i+)
+
+        self.driver.find_elements_by_xpath(self.loc_confer)[2].click()
