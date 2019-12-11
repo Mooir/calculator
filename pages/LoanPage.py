@@ -34,6 +34,7 @@ class LoanPage(BasePages):
     loc_count = (By.XPATH, "//*[@id='repay']/div[1]/div[3]/a")
     # 贷款年限&利率
     loc_select = "//li[@class='wheel-item']"
+    loc_select_n = "//ul[@class='wheel-scroll']"
     # 选择栏确认按钮
     loc_confer = "//span[@class='pt-submit']"
     # 测试数据
@@ -75,9 +76,17 @@ class LoanPage(BasePages):
         self.find_element(*self.loc_input_buss).clear()
         self.find_element(*self.loc_input_buss).send_keys(keys)
 
-    # 点击计算
     def click_count(self):
+        """点击计算"""
         self.find_element(*self.loc_count).click()
+
+    def select_tab_buss(self):
+        """切换商业贷款tab"""
+        self.find_element(*self.loc_buss_tab).click()
+
+    def select_tab_mix(self):
+        """切换组合贷款tab"""
+        self.find_element(*self.loc_mix_tab).click()
 
     # 选择贷款年限[0-29]
     def select_year(self, year_num):
@@ -87,6 +96,7 @@ class LoanPage(BasePages):
         sleep(0.2)
         list = self.driver.find_elements_by_xpath(self.loc_select)
         for i in range(0, 31-year_num):
+            # print(list[i].text)
             list[i].click()
             sleep(0.5)
         # sleep(0.5)
@@ -106,8 +116,11 @@ class LoanPage(BasePages):
         self.driver.find_element_by_xpath(self.loc_buss_rate).click()
         sleep(0.5)
         list = self.driver.find_elements_by_xpath(self.loc_select)
-        buss_rate = self.randit(32, 47)
+        # print(list[2].text)
+        buss_rate = self.randit(0, 15)
+        print(buss_rate)
         for i in range(32, buss_rate):
+            # index = i+32
             list[i].click
             sleep(0.5)
         self.driver.find_elements_by_xpath(self.loc_confer)[2].click()
@@ -131,37 +144,38 @@ class LoanPage(BasePages):
         """等额本金"""
         count = 0
         periods = 12*periods
+        m_repay = np.zeros(periods)
+        m_capital = capital/periods             #每月应还本金
+        m_rate = self._month_rate(y_rate)       #月利率
         for i in range(0, periods):
+            m_repay[i] = m_capital+ m_rate*(capital- i*m_capital)
+            count += m_repay[i]
+        total_repay = sum(m_repay)
+        # total_repay = np.around(sum(m_repay), 3)
+        return np.round(total_repay, 2)
 
-        monthlyPayment[i] = np.around(
-            (mortgage/month)+
-            (
-                (mortgage)*monthlyInterestRate(anualInterestRate)
-            ) - 
-            (i*(mortgage/month)*monthlyInterestRate(anualInterestRate)),2)
-
-
-
-            m_capital = capital/periods             #每月应还本金
-
-            m_repay[i] = np.round((capital/periods)+((capital)))
-        return
+    def repay_equal_interest(self, capital, y_rate, periods):
+        """等额本息计算方式"""
+        # periods = periods*12
+        m_repay = self._equal_capital_rate(periods, y_rate)*capital
+        total_repay = 12*periods*m_repay
+        return np.round(total_repay, 2)
 
     def _month_rate(self, y_rate):
         """每月利率"""
         return (y_rate/12)/100
 
-    def _total_rate(self, capital, m_repay, periods)
+    def _total_rate(self, capital, m_repay, periods):
         """总利息"""
-        return m_repay*(periosd*12) - capital
+        return m_repay*(periods*12) - capital
 
-    def _equal_capital_rate(self, periods):
+    def _equal_capital_rate(self, periods, y_rate):
         """比例系数-每月应还"""
-        R = self._month_rate
+        # I = 0
+        R = self._month_rate(y_rate)
         N = periods*12
-        I = R * math.pow(1+R, N)/ (math.pow(1+R, N)-1)
+        I = (R * math.pow(1+R, N))/ (math.pow(1+R, N)-1)
         return I
-
 
 
 

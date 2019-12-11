@@ -66,14 +66,16 @@ class BasePages(object):
         #         self.find_element(*loc).send_keys(vaule)
         # except AttributeError:
         #     print ("%s 页面中未能找到 %s 元素"%(self, loc))
-    # 获取元素的内容
+    # 
     def get_ele_value(self, driver, xpath, key):
+        """获取元素的内容"""
         value = driver.find_element_by_xpath(xpath).get_attribute(key)
         list_limits = self.get_num(value)
         return list_limits
 
-    # 提取文本中的数字
+    # 
     def get_num(self, str):
+        """提取文本中的数字"""
         p = re.compile(r'[0-9]+\.?[0-9]*')
         # p = re.compile(r'\d +.?\d *')
         list_num = p.findall(str)
