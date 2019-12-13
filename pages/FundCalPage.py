@@ -1,3 +1,5 @@
+import sys
+sys.path.append('C:\\code\\calculator')
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from common.common import BasePages

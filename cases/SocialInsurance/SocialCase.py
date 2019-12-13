@@ -1,6 +1,8 @@
 import re
 import unittest
 import time
+import sys
+sys.path.append('C:\\code\\calculator')
 from time import sleep
 from pages.SocialInsurPage import *
 from pages.SocialResultPage import *

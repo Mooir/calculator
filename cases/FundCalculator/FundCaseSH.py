@@ -1,3 +1,5 @@
+import sys
+sys.path.append('C:\\code\\calculator')
 import unittest
 from time import sleep
 from pages.FundCalPage import *
@@ -22,7 +24,7 @@ class FunCalCount(unittest.TestCase):
 
         self.fundcount_page.open()
         list = self.fundcount_page.get_SH_testdata()
-        print(list)
+        # print(list)
         sleep(5)
         for item in list:
             self.salary = str(item['salary'])

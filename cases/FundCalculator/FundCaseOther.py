@@ -1,3 +1,5 @@
+import sys
+sys.path.append('C:\\code\\calculator')
 import unittest
 from time import sleep
 from pages.FundCalPage import *

@@ -64,7 +64,10 @@ class LoanPage(BasePages):
     # 获取商贷利率
     def get_buss_rate(self):
         list = self.get_ele_value(self.driver, self.loc_buss_rate, 'value')
-        return float(list[0])
+        if len(list) == 1:
+            return float(list[0])
+        else:
+            return float(list[1])
 
     # 输入贷款公积金金额
     def input_acc_count(self, keys):
@@ -108,7 +111,9 @@ class LoanPage(BasePages):
         sleep(0.5)
         list = self.driver.find_elements_by_xpath(self.loc_select)
         acc_rate = self.randit(30, 31)
-        list[acc_rate].click
+        sleep(0.5)
+        list[acc_rate].click()
+        sleep(0.5)
         self.driver.find_elements_by_xpath(self.loc_confer)[1].click()
 
     # 选择商业贷款利率[32-47]
@@ -116,14 +121,16 @@ class LoanPage(BasePages):
         self.driver.find_element_by_xpath(self.loc_buss_rate).click()
         sleep(0.5)
         list = self.driver.find_elements_by_xpath(self.loc_select)
-        # print(list[2].text)
-        buss_rate = self.randit(0, 15)
-        print(buss_rate)
+        buss_rate = self.randit(32, 47)
+        # print(buss_rate)
         for i in range(32, buss_rate):
-            # index = i+32
-            list[i].click
+            list[i].click()
             sleep(0.5)
         self.driver.find_elements_by_xpath(self.loc_confer)[2].click()
+
+    def select_type_capital(self):
+        """选择计算方式-等额本金"""
+        self.find_element(*self.loc_principal).click()
 
     # 获取公积金贷款测试数据
     def get_acc_testdata(self):
@@ -143,7 +150,7 @@ class LoanPage(BasePages):
     def repay_equal_capital(self, capital, y_rate, periods):
         """等额本金"""
         count = 0
-        periods = 12*periods
+        periods = int(12*periods)
         m_repay = np.zeros(periods)
         m_capital = capital/periods             #每月应还本金
         m_rate = self._month_rate(y_rate)       #月利率
@@ -159,6 +166,20 @@ class LoanPage(BasePages):
         # periods = periods*12
         m_repay = self._equal_capital_rate(periods, y_rate)*capital
         total_repay = 12*periods*m_repay
+        return np.round(total_repay, 2)
+
+    def mix_repay_capital(self, acc_capital, buss_capital, mix_year, acc_rate, buss_rate):
+        """组合贷款-等额本金计算方式"""
+        repay_acc = self.repay_equal_capital(acc_capital, acc_rate, mix_year)
+        repay_buss = self.repay_equal_capital(buss_capital, buss_rate, mix_year)
+        total_repay = repay_acc + repay_buss
+        return np.round(total_repay, 2)
+
+    def mix_repay_interest(self, acc_capital, buss_capital, mix_year, acc_rate, buss_rate):
+        """组合贷款-等额本息计算方式"""
+        repay_acc = self.repay_equal_interest(acc_capital, acc_rate, mix_year)
+        repay_buss = self.repay_equal_interest(buss_capital, buss_rate, mix_year)
+        total_repay = repay_acc+ repay_buss
         return np.round(total_repay, 2)
 
     def _month_rate(self, y_rate):
