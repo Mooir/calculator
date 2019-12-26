@@ -1,9 +1,16 @@
 import sys
-sys.path.append('C:\\code\\calculator')
+sys.path.append('./')
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from common.common import *
 from time import sleep
+
+"""
+introduction：个税计算器：薪资计算结果页
+author：黄思梦
+date-last-modified：2019-12-26
+last-modified-by：黄思梦
+"""
 
 
 class RSalaryPage(BasePages):
