@@ -1,5 +1,6 @@
 import re
 import xlrd
+from time import sleep
 from selenium.webdriver.support.wait import WebDriverWait
 from  selenium.webdriver.support import expected_conditions as EC
 
@@ -40,9 +41,6 @@ class BasePages(object):
         if pagetitle is not None:
             assert self.on_page(pagetitle),u"打开开页面失败 %s"%url
 
-    # def open(self):
-    #     # self._open(self.base_url,self.pagetitle)
-    #     self._open(self.base_url)
     def find_element(self,*loc):
         try:
             WebDriverWait(self.driver,10).until(EC.visibility_of_element_located(loc))
@@ -50,30 +48,42 @@ class BasePages(object):
         except:
             print("%s页面 中未能找到%s元素"%(self, *loc))
 
+    def _find_ele(self, type, value):
+        """定位元素"""
+        if type == 'id':
+            el = self.driver.find_element_by_id(value)
+        elif type == "name":
+            el = self.driver.find_element_by_name(value)
+        elif type == "class_name":
+            el = self.driver.find_element_by_class_name(value)
+        elif type == "tag_name":
+            el = self.driver.find_element_by_tag_name(value)
+        elif type == "link_text":
+            el = self.driver.find_element_by_link_text(value)
+        elif type == "partial_link_text":
+            el = self.driver.find_element_by_partial_link_text(value)
+        elif type == "xpath":
+            el = self.driver.find_element_by_xpath(value)
+        elif type == "css_selector":
+            el = self.driver.find_element_by_css_selector(value)
+        elif type == "class_names":
+            el = self.driver.find_elements_by_class_name(value)
+        elif type == "xpaths":
+            el = self.driver.find_elements_by_xpath(value)
+        return el
+
     def switch_frame(self, *loc):
         return self.driver.switch_to_frame(*loc)
     
     def script(self,src):
         self.driver.execute_script(src)
 
-    # def send_keys(self, loc, value):
-        # try:
-        #     loc = getattr(self,"_%s"% loc)  #getattr相当于实现self.loc
-        #     if click_first:
-        #         self.find_element(*loc).click()
-        #     if clear_first:
-        #         self.find_element(*loc).clear()
-        #         self.find_element(*loc).send_keys(vaule)
-        # except AttributeError:
-        #     print ("%s 页面中未能找到 %s 元素"%(self, loc))
-    # 
     def get_ele_value(self, driver, xpath, key):
         """获取元素的内容"""
         value = driver.find_element_by_xpath(xpath).get_attribute(key)
         list_limits = self.get_num(value)
         return list_limits
 
-    # 
     def get_num(self, str):
         """提取文本中的数字"""
         p = re.compile(r'[0-9]+\.?[0-9]*')
@@ -114,6 +124,18 @@ class BasePages(object):
                 L.append(sheet_data)
             return L
 
+    def slither_end(self):
+        js = "var str=document.documentElement.scrollTop=1000000"
+        self.driver.execute_script(js)
+        sleep(0.5)
+
+    def slither_top(self):
+        js = "var str=document.documentElement.scrollTop=0"
+        self.driver.execute_script(js)
+        sleep(0.5)
+
+    def slither_direc(self, loc_xpath):
+        pass
 
 
 
