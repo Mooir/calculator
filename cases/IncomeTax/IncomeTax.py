@@ -43,7 +43,7 @@ class IncomeTax(unittest.TestCase):
         try:
             self.assertEqual(city_text, '河南驻马店', msg='切换城市出错')
         except Exception as e:
-            print("Test Fail!", format(e))
+            raise Exception("Test Fail!", format(e))
 
     def test_2(self):
         """选择月份"""
@@ -118,9 +118,7 @@ class IncomeTax(unittest.TestCase):
         """校验输入框"""
         self.tax_page.open(self.url)
         self.tax_page.input_salary(10000000000)
-        # sleep(0.5)
         flag = self.tax_page.toast_exist()
-        # print(flag)
         try:
             if flag:
                 pass
@@ -139,28 +137,27 @@ class IncomeTax(unittest.TestCase):
                 pass
         except:
             raise Exception("Test Fail! 无toast提示")
-        sleep(4)
-
-    def test_9(self):
-        """专项附加扣除-赡养老人的子女个数增加"""
-        self.tax_page.open(self.url)
-        self.tax_page.click_deItems()
 
 
 if __name__ == "__main__":
+    now = time.strftime("%Y-%m-%M-%H_%M_%S", time.localtime(time.time()))
+    filename = now + '.html'
+
     suite = unittest.TestSuite()
     cases = [
-        # IncomeTax("test_1"),
-        # IncomeTax("test_2"),
-        # IncomeTax("test_3"),
-        # IncomeTax("test_4"),
-        # IncomeTax("test_5"),
-        # IncomeTax("test_6"),
-        # IncomeTax("test_7"),
+        IncomeTax("test_1"),
+        IncomeTax("test_2"),
+        IncomeTax("test_3"),
+        IncomeTax("test_4"),
+        IncomeTax("test_5"),
+        IncomeTax("test_6"),
+        IncomeTax("test_7"),
         IncomeTax("test_8")
     ]
 
     suite.addTests(cases)
+    runner = BeautifulReport(suite)
+    runner.report(filename=filename, description="个税计算器测试报告", log_path="./report")
 
-    runner = unittest.TextTestRunner()
-    runner.run(suite)
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite)
