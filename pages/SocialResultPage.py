@@ -4,6 +4,15 @@ from selenium.webdriver.common.by import By
 from common.common import BasePages
 from pages.SocialInsurPage import *
 
+
+"""
+introduction：社保计算器计算结果页
+author：黄思梦
+date-last-modified：2019-12-26
+last-modified-by：黄思梦
+"""
+
+
 class SocialResult(BasePages):
     # 合计
     total_count_loc = "//*[@id='social_result']/div/div[2]/p[1]"
