@@ -1,5 +1,5 @@
 import sys
-sys.path.append('C:\\code\\calculator')
+sys.path.append('./')
 import unittest
 from time import sleep
 from pages.FundCalPage import *
