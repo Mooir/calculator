@@ -4,9 +4,18 @@ import math
 import numpy as np
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-sys.path.append('C:\\code\\calculator')
+sys.path.append('./')
 from common.common import *
 from time import sleep
+
+
+"""
+introduction：贷款计算器主页
+author：黄思梦
+date-last-modified：2019-12-26
+last-modified-by：黄思梦
+"""
+
 
 class LoanPage(BasePages):
     base_url = "https://apps.eshiyun.info/tools/"
