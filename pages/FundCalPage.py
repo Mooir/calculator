@@ -1,8 +1,17 @@
 import sys
-sys.path.append('C:\\code\\calculator')
+sys.path.append('./')
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from common.common import BasePages
+
+
+"""
+introduction：公积金计算器主页
+author：黄思梦
+date-last-modified：2019-12-26
+last-modified-by：黄思梦
+"""
+
 
 class FundCalPage(BasePages):
     salary_loc = (By.ID,'salary')
