@@ -6,6 +6,13 @@ from common.common import *
 from time import sleep
 
 
+"""
+introduction：个税计算器主页
+author：黄思梦
+date-last-modified：2019-12-26
+last-modified-by：黄思梦
+"""
+
 class TaxPage(BasePages):
     loc_year_bouns = "//*[@id='Tax2']/div[2]/div[1]/div[1]/div[2]"
     loc_input_bouns = "//*[@id='Tax2']/div[2]/div[1]/div[2]/input"
