@@ -5,7 +5,7 @@ import unittest
 from BeautifulReport import BeautifulReport
 from selenium import webdriver
 from time import sleep
-sys.path.append('C:\\code\\calculator')
+sys.path.append('./')
 from pages.LoanPage import *
 from pages.LoanResultPage import *
 
